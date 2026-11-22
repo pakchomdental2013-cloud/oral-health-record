@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ระบบตรวจสุขภาพช่องปากและติดตามการรักษานักเรียน</title>
+<style>
+:root{--green:#356b43;--green2:#eaf3ec;--nav:#214e3a;--blue:#1769aa;--ink:#243447;--line:#dce4ed;--bg:#f3f6fa;--red:#b83c35;--gold:#a66b00}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Thai",sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--nav);color:#fff;padding:17px 22px;font-size:20px;font-weight:700}
+.layout{display:flex;min-height:calc(100vh - 58px)}aside{width:218px;flex:0 0 218px;background:#174b3d;padding:14px}aside button{display:block;width:100%;padding:12px;text-align:left;color:#fff;background:transparent;border:0;border-radius:8px;font-size:15px;margin:3px 0;cursor:pointer}aside button.active,aside button:hover{background:#ffffff27}
+main{padding:20px;flex:1;min-width:0}.page{display:none}.page.active{display:block}.card{background:#fff;padding:17px;border:1px solid var(--line);border-radius:12px;margin-bottom:15px;box-shadow:0 1px 2px #23354a08}h2{color:var(--nav);margin:0 0 14px}h3{margin:0 0 11px;color:#304b3a}.muted{color:#64748b;font-size:13px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}label{font-weight:700;font-size:14px}input,select,textarea{display:block;width:100%;padding:10px;border:1px solid #cbd6e2;border-radius:7px;margin-top:5px;font:inherit;background:#fff;color:var(--ink)}textarea{min-height:74px}.btn{background:var(--blue);color:#fff;border:0;padding:10px 15px;border-radius:7px;cursor:pointer;margin:5px 4px 5px 0;font:inherit}.btn.green{background:var(--green)}.btn.secondary{background:#65788b}.btn.danger{background:#a94442}.btn.small{padding:6px 10px;font-size:13px}.btn:disabled{opacity:.5;cursor:not-allowed}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{background:#edf5fc;padding:15px;border-radius:9px}.stat b{display:block;font-size:27px;margin-top:6px}.patient-banner{padding:13px 15px;background:var(--green2);border:1px solid #c9dfce;border-radius:10px;margin-top:12px}.patient-banner strong{font-size:17px}.search-results{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.result-btn{background:#eef4f8;border:1px solid #cbd8e3;border-radius:8px;padding:9px 12px;text-align:left;cursor:pointer;color:#234}.result-btn:hover{border-color:var(--green)}
+.section-head{background:var(--green);color:#fff;padding:13px 16px;border-radius:9px 9px 0 0;margin:-17px -17px 15px;font-weight:700}.exam-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px}.chart-wrap{display:grid;grid-template-columns:minmax(185px,240px) 1fr;gap:18px;align-items:start}.legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;font-size:13px}.legend span{display:flex;align-items:center;gap:8px}.status-choice{display:flex;align-items:center;gap:7px;text-align:left;padding:8px 9px;border:1px solid #d5dde5;border-radius:8px;background:#fff;color:#263747;cursor:pointer;font:inherit;font-size:12px;min-height:38px}.status-choice.active{border:2px solid var(--green);background:#edf6ef;box-shadow:0 0 0 2px #356b4314}.status-choice:disabled{opacity:.45;cursor:not-allowed}.status-choice .dot{width:15px;height:15px;border:1px solid #9aa7b4;border-radius:4px;display:inline-block;flex:0 0 15px}.active-status{font-size:12px;color:#31533c;background:#eaf3ec;border-radius:7px;padding:8px;margin-top:9px}.plan-select{min-width:155px;padding:7px;font-size:12px;margin:0}.finding-table td{vertical-align:middle}.tooth-detail-btn{padding:5px 8px;font-size:12px}.archlabel{text-align:center;color:#52677c;font-weight:700;margin:12px 0 3px}.teeth{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;margin:6px auto 10px;max-width:800px}.result-chart{background:#f8fafb;border:1px solid #e1e8ee;border-radius:12px;padding:12px;margin-top:12px}.result-chart{background:linear-gradient(180deg,#fbfdfc,#f4f8fb);padding:18px}.result-arch{gap:8px;max-width:100%;padding:8px 4px}.archlabel{font-size:14px;background:#eaf3ec;border-radius:20px;padding:6px 14px;width:max-content;max-width:100%;margin:15px auto 8px}.chart-wrap>.card{border-color:#dce8df}.chart-wrap>div:last-child{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}.teeth{gap:7px;max-width:100%;padding:8px 4px}.result-summary div{box-shadow:0 2px 6px #17324a0a}.result-legend span{font-weight:600}.result-arch{display:flex;justify-content:center;flex-wrap:wrap;gap:7px;margin:8px auto 16px;max-width:850px}.result-tooth{width:52px;min-height:67px;border:1px solid #c5d0d9;color:#263747;font-weight:700;font-size:12px;cursor:pointer;border-radius:13px;background:#fff;box-shadow:0 2px 5px #17324a12;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:4px 2px}.result-tooth svg{width:34px;height:39px;display:block;filter:drop-shadow(0 1px 1px #0002)}.result-tooth:hover{outline:2px solid #356b43;transform:translateY(-2px)}.result-tooth:disabled{cursor:default;opacity:.72}.result-legend{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0}.result-legend span{font-size:12px;border:1px solid #dce4ed;border-radius:16px;padding:4px 9px;background:#fff}.result-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:10px 0}.result-summary div{background:#fff;border:1px solid #e1e8ee;border-radius:8px;padding:9px;font-size:13px}.result-summary b{display:block;font-size:20px;margin-top:3px}.tooth{width:49px;min-height:63px;border:1px solid #d2dce4;border-radius:11px;background:#fff;cursor:pointer;font-size:12px;color:#203040;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:3px 2px;box-shadow:0 2px 5px #17324a10}.tooth svg{width:34px;height:39px;display:block;filter:drop-shadow(0 1px 1px #0002)}.tooth.selected{outline:3px solid #e8a82b}.tooth:hover{transform:translateY(-2px);box-shadow:0 4px 9px #17324a20}.chart-modes{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}.chart-mode-btn{background:#e9eef2;color:#294154;border:1px solid #cbd6df;padding:9px 13px;border-radius:8px;cursor:pointer;font:inherit}.chart-mode-btn.active{background:var(--green);color:#fff;border-color:var(--green)}.chart-hint{background:#f4f8fb;border-left:4px solid var(--green);padding:9px 12px;border-radius:5px;margin-bottom:12px;font-size:13px;color:#415466}.normal{background:#fff}.caries{background:#f5b8b0}.deep{background:#d9d0f3}.recurrent{background:#ef9c92}.filled{background:#bfe6c9}.extracted{background:#d5dbe3}.early{background:#ffe6a6}.seal{background:#b9e4e7}.unerupted{background:#c8cdd3}
+.finding-row{display:flex;justify-content:space-between;gap:10px;align-items:center;border-bottom:1px solid #edf0f3;padding:8px 2px}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}td,th{border-bottom:1px solid #e3e8ee;padding:9px;text-align:left;vertical-align:top}th{background:#f1f6f2;color:#2f5138;white-space:nowrap}.status-pill{display:inline-block;padding:4px 8px;border-radius:14px;background:#eef2f6;font-size:12px;white-space:nowrap}.status-pill.need{background:#fde9e6;color:#9d2e27}.status-pill.done{background:#e4f4e8;color:#216337}.status-pill.follow{background:#fff4d8;color:#8b5e00}.care-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.message{position:sticky;bottom:8px;background:#fff7dc;padding:10px 13px;border:1px solid #f1d98e;border-radius:8px;min-height:20px;z-index:5}.hidden{display:none!important}.modal{position:fixed;inset:0;background:#0008;z-index:99;display:flex;align-items:center;justify-content:center;padding:16px}.modalbox{background:#fff;border-radius:14px;padding:22px;width:min(620px,100%);box-shadow:0 12px 40px #0004}.modal-actions{margin-top:14px}.small-note{font-size:12px;color:#6b7785}.summarybox{background:#f1f7fc;border:1px solid #d9e7f1;border-radius:9px;padding:12px;margin-top:12px}.history-item{padding:9px 0;border-bottom:1px solid #edf0f3}.history-item:last-child{border-bottom:0}
+@media(max-width:900px){.chart-wrap{grid-template-columns:1fr}.legend{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.layout{display:block}aside{width:100%;display:flex;overflow:auto;padding:8px}aside button{min-width:150px;text-align:center;font-size:13px}.layout{min-height:0}main{padding:11px}.grid,.exam-meta,.care-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.tooth{width:40px;min-height:54px;font-size:11px}.tooth svg{width:29px;height:33px}.result-tooth{width:43px;min-height:58px}.result-tooth svg{width:29px;height:33px}.card{padding:13px}.section-head{margin:-13px -13px 13px}.legend{grid-template-columns:1fr 1fr}}
+@media print{aside,.btn,.message{display:none!important}main{padding:0}.page{display:none!important}#workspace{display:block!important}.card{break-inside:avoid;box-shadow:none}}
+
+.finding-heading p{margin:7px 0;color:#526477;font-size:13px;line-height:1.7}
+.finding-status-summary{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 14px}
+.finding-arch{background:#f8fbf9;border:1px solid #e0e9e3;border-radius:12px;padding:10px;margin:12px 0}
+.finding-teeth{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px}
+.finding-tooth-card{min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border:1px solid #dce4e8;border-radius:10px;background:#fff;box-shadow:0 1px 3px #23354a0a;text-align:center}
+.finding-tooth-icon{width:42px;height:44px;border-radius:9px;background:var(--tooth-bg);display:grid;place-items:center}
+.finding-tooth-icon svg{width:34px;height:38px}
+.finding-tooth-card>b{font-size:13px}.finding-tooth-status{font-size:11px;line-height:1.35;min-height:30px;overflow-wrap:anywhere}
+.finding-plan{width:100%;font-size:10px;color:#526477}.finding-plan select{font-size:10px;padding:5px;margin-top:3px;min-width:0}
+.finding-tooth-card .btn{font-size:10px;padding:4px 6px;margin:2px 0}
+@media(max-width:900px){.finding-teeth{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:480px){.finding-teeth{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+
+.pending-care-section{margin-top:14px;background:#f8fbf9;border:1px solid #dfe9e2;border-radius:12px;padding:14px}
+.pending-care-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;color:#244b37}
+.pending-care-title span{font-size:12px;color:#68798a}
+.pending-care-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.pending-care-card{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #ead6d2;border-radius:10px;padding:10px;min-width:0}
+.pending-tooth-icon{width:48px;height:50px;border-radius:10px;display:grid;place-items:center;flex:0 0 48px}
+.pending-tooth-icon svg{width:36px;height:40px}
+.pending-care-main{display:flex;flex-direction:column;align-items:flex-start;gap:4px;flex:1;min-width:0}
+.pending-care-main small{font-size:11px;color:#68798a;overflow-wrap:anywhere}
+.pending-care-card .btn{white-space:nowrap}
+.pending-empty{background:#eef7f0;border:1px solid #cfe4d4;border-radius:10px;padding:18px;text-align:center;color:#28633c}
+.pending-empty p{margin:6px 0 0;font-size:13px}
+@media(max-width:600px){.pending-care-card{flex-wrap:wrap}.pending-care-card .btn{width:100%}.pending-care-title{align-items:flex-start;flex-direction:column}}
+
+
+/* Visual refresh: clean, readable, clinic-friendly interface */
+:root{--green:#176b55;--green2:#e9f5ef;--blue:#2878a8;--nav:#173f36;--line:#dce7e2;--ink:#20312d}
+body{background:#f3f7f5;color:var(--ink);font-family:Inter,"Noto Sans Thai",Tahoma,sans-serif;line-height:1.55}
+header{background:linear-gradient(110deg,#145b49,#25866b);box-shadow:0 3px 14px #153f3320;padding:15px 22px}
+header h1{font-size:21px;letter-spacing:.1px}
+aside{background:linear-gradient(180deg,#164d40,#123d34);padding:18px 12px}
+aside button{border-radius:11px;padding:12px 14px;transition:background .18s,transform .18s}
+aside button:hover{transform:translateX(2px)}
+main{padding:24px;max-width:1600px;margin:0 auto}
+.page>h2{font-size:24px;letter-spacing:-.2px;margin-bottom:18px}
+.card{border:1px solid #e0eae5;border-radius:16px;box-shadow:0 5px 18px #183b2d08;padding:20px;margin-bottom:18px}
+.section-head{border-radius:12px;margin:-20px -20px 18px;padding:14px 18px;background:linear-gradient(100deg,#176b55,#27866b);font-size:15px}
+input,select,textarea{border-color:#d2dfd8;border-radius:10px;padding:11px 12px;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#27866b;box-shadow:0 0 0 3px #27866b20}
+.btn{border-radius:10px;padding:10px 16px;font-weight:650;box-shadow:0 2px 5px #183b2d12;transition:transform .15s,filter .15s}
+.btn:hover{filter:brightness(1.04);transform:translateY(-1px)}
+.stats{gap:14px}.stat{border:1px solid #dcebe3;border-radius:14px;background:linear-gradient(145deg,#fff,#edf7f1);padding:17px}.stat b{color:#176b55;font-size:29px}
+.patient-banner{border-radius:13px;background:#e9f5ef;border-color:#c6e4d3}
+.result-btn{border-radius:10px;background:#f5faf7;border-color:#dce9e1;padding:10px 13px}
+.chart-wrap{gap:16px}.chart-wrap>.card{border-radius:14px}
+.status-choice{border-radius:10px;min-height:42px;padding:9px;font-weight:550}.status-choice.active{border-color:#176b55;background:#e7f5ed}
+.tooth{border-radius:13px;min-height:66px;width:51px}.tooth.selected{outline-color:#d69a26}
+.finding-arch{border-radius:14px;border-color:#dce9e1}.finding-tooth-card{border-radius:12px;padding:9px 5px}
+.finding-tooth-card .btn{border-radius:8px}
+.tablewrap{border:1px solid #e2eae5;border-radius:12px;background:#fff}table{font-size:13px}td,th{padding:10px 11px}th{background:#edf6f0;color:#22533f}
+.message{border-radius:12px;box-shadow:0 4px 14px #263b300d}
+.modalbox{border-radius:18px;padding:24px}
+@media(max-width:900px){main{padding:14px}.card{padding:15px}.section-head{margin:-15px -15px 14px}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.layout{display:block}aside{width:100%;display:flex;overflow:auto;padding:7px;gap:5px}aside button{white-space:nowrap;width:auto;flex:0 0 auto;font-size:13px;padding:9px 11px}main{padding:12px}.grid,.exam-meta,.care-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.page>h2{font-size:20px}.finding-teeth{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+</style>
+</head>
+<body>
+<header>ระบบตรวจสุขภาพช่องปากและติดตามการรักษานักเรียน</header>
+<div class="layout">
+<aside>
+<button class="active" onclick="showPage('dash',this)">ภาพรวม</button>
+<button onclick="showPage('students',this)">ทะเบียนนักเรียน</button>
+<button onclick="showPage('workspace',this)">ตรวจสุขภาพและบันทึกการรักษา</button>
+<button onclick="showPage('reports',this)">รายงาน</button>
+</aside>
+<main>
+<section id="dash" class="page active">
+<h2>ภาพรวมระบบ</h2>
+<div class="stats"><div class="stat">นักเรียนทั้งหมด<b id="nStudents">0</b></div><div class="stat">ครั้งที่ตรวจ<b id="nExams">0</b></div><div class="stat">รายการรักษา<b id="nTreat">0</b></div></div>
+<div class="card"><p>ระบบบันทึกผลตรวจจากโรงเรียนไว้เป็นประวัติเดิม และบันทึกการรักษาจากโรงพยาบาลเพิ่มแยกต่างหากในหน้าทำงานเดียวกัน</p><button class="btn" onclick="loadDash()">ปรับปรุงข้อมูล</button><button class="btn green" onclick="showPage('workspace',document.querySelectorAll('aside button')[2])">ไปหน้าตรวจสุขภาพและบันทึกการรักษา</button></div>
+</section>
+<section id="students" class="page">
+<h2>ทะเบียนนักเรียน</h2>
+<div class="card"><h3>เพิ่ม/ปรับปรุงนักเรียน</h3><div class="grid"><label>เลขประจำตัวนักเรียน / เลขบัตรประชาชน<input id="cid" maxlength="20" placeholder="เลขไทย 13 หลัก หรือรหัส G เช่น G123456789"></label><label>ชื่อ<input id="fname"></label><label>นามสกุล<input id="lname"></label><label>ชั้น<input id="grade" placeholder="เช่น อนุบาล 1 หรือ ป.1"></label><label>โรงเรียน<input id="school"></label></div><button class="btn" onclick="saveStudent()">บันทึกนักเรียน</button></div>
+<div class="card"><h3>นำเข้ารายชื่อจาก Excel</h3><p class="muted">วางข้อมูล 5 คอลัมน์: เลขประจำตัว (เลขไทย 13 หลัก หรือรหัส G) | ชื่อ | นามสกุล | ชั้น | โรงเรียน หรือวางตารางที่คัดลอกจากเอกสารได้</p><textarea id="bulk" placeholder="วางรายชื่อนักเรียนที่นี่"></textarea><button class="btn" onclick="importBulk()">นำเข้าหลายคน</button></div>
+</section>
+<section id="workspace" class="page">
+<h2>ตรวจสุขภาพช่องปากและบันทึกการรักษา</h2>
+<div class="card">
+<div class="section-head">1. เลือกโรงเรียนและระดับชั้นเพื่อแสดงรายชื่อนักเรียน</div>
+<p class="muted">เลือกโรงเรียนและชั้นเรียน ระบบจะแสดงรายชื่อทั้งหมด กดปุ่ม “ตรวจคนนี้” เพื่อเริ่มบันทึกผลตรวจได้ทันที ไม่ต้องพิมพ์เลขบัตรประชาชน</p>
+<div class="grid"><label>โรงเรียน<select id="rosterSchool" onchange="refreshRosterGrades()"><option value="">เลือกโรงเรียน</option></select></label><label>ระดับชั้น<select id="rosterGrade" onchange="loadRoster()"><option value="">ทุกชั้น</option></select></label></div>
+<div id="rosterCount" class="muted" style="margin-top:8px">กรุณาเลือกโรงเรียนเพื่อแสดงรายชื่อ</div><div id="studentRoster" class="search-results"></div>
+</div>
+<div class="card">
+<div class="section-head">หรือค้นหานักเรียน (ใช้สำหรับงานโรงพยาบาล/บันทึกการรักษา)</div>
+<div class="grid"><label>เลขบัตรประชาชนหรือชื่อนักเรียน<input id="workSearch" placeholder="พิมพ์เลขบัตรประชาชน ชื่อ หรือนามสกุล" onkeydown="if(event.key==='Enter')searchPatient()"></label><div style="align-self:end"><button class="btn green" onclick="searchPatient()">ค้นหานักเรียน</button></div></div>
+<div id="searchResults" class="search-results"></div>
+<div id="patientBanner" class="patient-banner hidden"></div>
+</div>
+<div id="patientWork" class="hidden">
+<div class="card">
+<div class="section-head">2. ตรวจสภาพฟันและบันทึกผลตรวจ</div>
+<div class="exam-meta"><label>วันที่ตรวจ<input type="date" id="examDate"></label><label>ผู้ตรวจ<select id="examiner"><option value="">เลือกชื่อผู้ตรวจ</option></select></label></div>
+<div class="exam-meta" style="margin-top:12px"><label>สภาพเหงือก<select id="gumStatus"><option value="ยังไม่ได้ประเมิน">ยังไม่ได้ประเมิน</option><option value="ไม่มีเหงือกอักเสบ">ไม่มีเหงือกอักเสบ</option><option value="เหงือกอักเสบเล็กน้อย">เหงือกอักเสบเล็กน้อย</option><option value="เหงือกอักเสบมาก">เหงือกอักเสบมาก</option></select></label><label>ระดับความเร่งด่วน<select id="urgency"><option value="ยังไม่ได้ประเมิน">ยังไม่ได้ประเมิน</option><option value="ปกติ">ปกติ / ไม่เร่งด่วน</option><option value="ควรได้รับการรักษาเร็ว">ควรได้รับการรักษาเร็ว</option><option value="เร่งด่วน">เร่งด่วน</option></select></label></div>
+<label style="display:block;margin-top:12px">หมายเหตุการตรวจ<textarea id="examNote" placeholder="หมายเหตุเพิ่มเติม (ถ้ามี)"></textarea></label>
+<hr style="border:0;border-top:1px solid #e6ebef;margin:16px 0">
+<div class="chart-modes" aria-label="โหมดการใช้งานผังฟัน">
+<button type="button" id="modeExamBtn" class="chart-mode-btn active" onclick="setChartMode('exam')">โหมดบันทึกผลตรวจ</button>
+<button type="button" id="modeCareBtn" class="chart-mode-btn" onclick="setChartMode('treatment')">โหมดบันทึกการรักษา</button>
+</div>
+<div id="chartModeHint" class="chart-hint">โหมดตรวจ: ระบบจำผลตรวจครั้งก่อนให้ หากเป็นครั้งแรกฟันแท้เริ่มเป็น “ยังไม่ขึ้น” และฟันน้ำนมเป็น “ยังไม่ได้ประเมิน” กรุณาเปลี่ยนเฉพาะซี่ที่ตรวจพบว่ามีฟันหรือมีความผิดปกติ</div>
+<div class="chart-wrap">
+<div class="card" style="margin:0;background:#fbfcfd"><h3>1. เลือกสถานะฟันก่อน</h3><div id="legend" class="legend"></div><div id="activeStatusText" class="active-status">ยังไม่ได้เลือกสถานะ — เลือกสถานะก่อน แล้วคลิกหมายเลขฟันได้หลายซี่</div><p class="small-note">เลือกสถานะหนึ่งรายการ จากนั้นคลิกฟันทุกซี่ที่มีสภาพเดียวกัน หากเลือกผิดให้เลือกสถานะใหม่แล้วคลิกซี่เดิมอีกครั้ง</p></div>
+<div>
+<div class="archlabel">ฟันแท้บน</div><div class="teeth" id="adultUpper"></div>
+<div class="archlabel">ฟันแท้ล่าง</div><div class="teeth" id="adultLower"></div>
+<div class="archlabel">ฟันน้ำนมบน</div><div class="teeth" id="babyUpper"></div>
+<div class="archlabel">ฟันน้ำนมล่าง</div><div class="teeth" id="babyLower"></div>
+</div></div>
+<div id="findingList" class="card" style="background:#fbfcfd;margin-top:15px"><b>รายการผลตรวจที่กำลังบันทึก</b><p class="muted">เลือกสถานะก่อน แล้วคลิกเลือกฟันได้หลายซี่ รายการแผนการรักษาสามารถกำหนดแยกเป็นรายซี่ได้ด้านล่าง</p></div>
+<button class="btn green" onclick="saveExam()">บันทึกผลตรวจครั้งนี้</button>
+<p class="muted">ก่อนบันทึกต้องมีสถานะครบ 52 ตำแหน่ง ระบบจะจำผลตรวจเดิมไว้ และให้แก้เฉพาะซี่ที่เปลี่ยนแปลง โดยเลือก “ปกติ” เฉพาะซี่ที่มีฟันอยู่จริง ส่วนฟันน้ำนมที่หลุดตามวัยให้เลือก “ฟันน้ำนมหลุดตามธรรมชาติ” และฟันที่ถอนให้เลือก “ฟันที่ถูกถอน” ระบบจะเตือนตำแหน่งที่ยังไม่ได้ประเมิน และเก็บผลตรวจเดิมไว้แม้มีการรักษาภายหลัง</p>
+</div>
+<div class="card">
+<div class="section-head">3. ผลตรวจเดิมจากโรงเรียนและซี่ฟันที่ต้องติดตาม/รักษา</div>
+<div id="latestExamInfo" class="muted">เลือกนักเรียนเพื่อดูผลตรวจเดิม</div>
+<div id="examSummary"></div>
+<div id="dmftSummary" class="summarybox">สรุป DMFT/dmft จะแสดงเมื่อเลือกนักเรียน</div>
+</div>
+<div class="card" id="treatmentCard">
+<div class="section-head">4. บันทึกการรักษาเมื่อมารับบริการ</div>
+<p class="muted">เลือก “โหมดบันทึกการรักษา” แล้วคลิกซี่ฟันที่มีสีแสดงความผิดปกติบนผังได้โดยตรง ระบบจะใส่หมายเลขซี่และแสดงผลตรวจ/แผนเดิม จากนั้นเลือกหัตถการที่ทำจริง เช่น อุดฟัน</p>
+<div id="carePlanHint" class="summarybox">ยังไม่ได้เลือกซี่ฟันจากผลตรวจ</div>
+<div class="care-grid" style="margin-top:12px">
+<label>ซี่ฟัน FDI<input id="careTooth" placeholder="เช่น 16"></label>
+<label>วันที่รักษา<input type="date" id="careDate"></label>
+<label>ผู้ให้บริการ<select id="provider"><option value="">เลือกผู้ให้บริการ</option></select></label>
+<label>หัตถการที่ทำจริง<select id="procedure"><option value="">เลือกหัตถการ</option><option>อุดฟัน</option><option>PRR</option><option>ถอนฟัน</option><option>รักษารากฟัน</option><option>เคลือบหลุมร่องฟัน</option><option>เคลือบฟลูออไรด์</option><option>ขูดหินปูน</option><option>ตรวจติดตาม</option><option>อื่น ๆ</option></select></label>
+<label>ผลหลังรักษา<input id="outcome" readonly placeholder="ระบบแสดงผลตามหัตถการ"></label>
+<label>อ้างอิงแผนการรักษาจากโรงเรียน<input id="carePlan" readonly placeholder="แผนที่บันทึกไว้เดิม"></label>
+</div>
+<label style="display:block;margin-top:12px">หมายเหตุการรักษา<textarea id="careNote"></textarea></label>
+<button class="btn green" onclick="saveCare()">บันทึกประวัติการรักษา</button>
+<p class="muted">การบันทึกส่วนนี้จะเพิ่มประวัติการรักษาและปรับสถานะปัจจุบันที่แสดงในระบบ แต่ไม่แก้ไขผลตรวจเดิมจากโรงเรียน</p>
+</div>
+<div class="card"><div class="section-head">5. ประวัติการตรวจและการรักษาของนักเรียน</div><div id="history">ยังไม่มีประวัติ</div></div>
+</div>
+</section>
+<section id="reports" class="page"><h2>รายงานผลตรวจและติดตามการรักษา</h2>
+<div class="card"><h3>กรองข้อมูล</h3><div class="grid"><label>โรงเรียน<select id="reportSchool" onchange="refreshReportGrades();loadSchoolReport()"><option value="">ทุกโรงเรียน</option></select></label><label>ชั้นเรียน<select id="reportGrade" onchange="loadSchoolReport()"><option value="">ทุกชั้น</option></select></label></div><button class="btn green" onclick="loadSchoolReport()">ประมวลผลรายงาน</button><button class="btn" onclick="downloadSchoolReport()">ส่งออก Excel/CSV พร้อมรายละเอียดรายซี่</button><button class="btn secondary" onclick="window.print()">พิมพ์รายงาน</button></div>
+<div class="stats"><div class="stat">นักเรียนในรายการ<b id="rStudents">0</b></div><div class="stat">พบฟันผุทั้งหมด<b id="rCaries">0</b></div><div class="stat">รักษาแล้ว<b id="rTreated">0</b></div><div class="stat">ยังไม่รักษา<b id="rRemaining">0</b></div><div class="stat">รักษาครบแล้ว<b id="rComplete">0</b></div><div class="stat">ยังรักษาไม่ครบ<b id="rPending">0</b></div></div>
+<div class="card"><h3>สรุปรายชื่อนักเรียนรายบุคคล</h3><p class="muted">ใช้ผลตรวจล่าสุดที่ยืนยันแล้วของนักเรียนแต่ละคน และนับการรักษาที่อ้างอิงรหัสผลตรวจและซี่ฟันเดียวกัน เพื่อป้องกันการนับซ้ำ</p><div id="schoolReportTable" class="tablewrap">กด “ประมวลผลรายงาน” เพื่อแสดงข้อมูล</div></div>
+<div class="card"><h3>รายละเอียดรายซี่ฟัน</h3><div id="schoolReportDetails" class="tablewrap">รายละเอียดจะแสดงเมื่อประมวลผลรายงาน</div></div>
+<div class="card"><button class="btn" onclick="downloadCsv()">ส่งออกทะเบียน CSV</button><button class="btn" onclick="downloadSummaryCsv()">ส่งออกสรุปผลตรวจและ DMFT/dmft CSV</button></div></section>
+<div class="message" id="message">พร้อมใช้งาน</div>
+</main></div>
+
+<div id="toothModal" class="modal hidden"><div class="modalbox"><h3 id="modalTitle">บันทึกสภาพฟัน</h3><p id="toothTypeHelp" class="small-note">เลือกสถานะให้ตรงกับสิ่งที่ตรวจพบจริง</p><div class="grid"><label>สภาพฟัน<select id="status"></select></label><label>แผนการรักษาที่แนะนำ/ยืนยัน<select id="plan"></select></label><label>สภาพวัสดุเคลือบหลุมร่องฟัน<select id="sealant"><option value="">ไม่เกี่ยวข้อง</option><option>ยังติดดี</option><option>หลุดบางส่วน</option><option>หลุดทั้งหมด</option></select></label><label>หมายเหตุซี่ฟัน<input id="toothNote"></label></div><div class="modal-actions"><button class="btn green" onclick="addFinding()">เพิ่มสภาพฟันซี่นี้</button><button class="btn secondary" onclick="closeToothModal()">ยกเลิก</button></div></div></div>
+
+<script>
+const UNASSESSED='ยังไม่ได้ประเมิน';
+const statuses=[UNASSESSED,'ปกติ','ฟันผุ','ฟันที่มีหลุมร่องลึก','ฟันที่อุดแล้วผุต่อ','ฟันที่อุดแล้วไม่ผุ','ฟันที่ถูกถอน','ฟันน้ำนมหลุดตามธรรมชาติ','ฟันที่ผุระยะเริ่มแรก','ฟันที่ได้รับการเคลือบหลุมร่องฟันแล้ว','ฟันที่ยังไม่ขึ้น','ไม่มีฟันแต่กำเนิด'];
+const plans={'ปกติ':['ไม่ต้องทำอะไร'],'ฟันผุ':['อุดฟัน','PRR','รักษารากฟัน','ถอนฟัน'],'ฟันที่มีหลุมร่องลึก':['เคลือบหลุมร่องฟัน'],'ฟันที่อุดแล้วผุต่อ':['อุดฟันซ้ำ','รักษารากฟัน','ถอนฟัน','ประเมินการรักษาอื่น'],'ฟันที่อุดแล้วไม่ผุ':['ไม่ต้องรักษา'],'ฟันที่ถูกถอน':['ไม่ต้องรักษาซี่นี้'],'ฟันที่ผุระยะเริ่มแรก':['ฟลูออไรด์','ป้องกันฟันผุ','ติดตาม'],'ฟันที่ได้รับการเคลือบหลุมร่องฟันแล้ว':['ติดตามสภาพวัสดุ'],'ฟันที่ยังไม่ขึ้น':['ติดตามการขึ้นของฟัน']};
+const PLAN_REQUIRED_STATUSES=['ฟันผุ','ฟันที่มีหลุมร่องลึก','ฟันที่อุดแล้วผุต่อ','ฟันที่ผุระยะเริ่มแรก'];
+const statusColors={
+  'ยังไม่ได้ประเมิน':'#e7ebef','ปกติ':'#fff','ฟันผุ':'#f5b8b0','ฟันที่มีหลุมร่องลึก':'#d9d0f3',
+  'ฟันที่อุดแล้วผุต่อ':'#ef9c92','ฟันที่อุดแล้วไม่ผุ':'#bfe6c9','ฟันที่ถูกถอน':'#d5dbe3',
+  'ฟันน้ำนมหลุดตามธรรมชาติ':'#c3cbd3','ฟันที่ผุระยะเริ่มแรก':'#ffe6a6',
+  'ฟันที่ได้รับการเคลือบหลุมร่องฟันแล้ว':'#b9e4e7','ฟันที่ยังไม่ขึ้น':'#c8cdd3','ไม่มีฟันแต่กำเนิด':'#b6bec8','รักษารากฟันแล้ว':'#bfe6c9'
+};
+const ABSENT_STATUSES=['ฟันที่ถูกถอน','ฟันน้ำนมหลุดตามธรรมชาติ','ฟันที่ยังไม่ขึ้น','ไม่มีฟันแต่กำเนิด'];
+const PRESENT_STATUSES=statuses.filter(s=>![UNASSESSED,...ABSENT_STATUSES].includes(s)).concat(['รักษารากฟันแล้ว']);
+const ALL_TEETH=[
+  ...[18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28].map(n=>({tooth:String(n),toothType:'ฟันแท้'})),
+  ...[48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38].map(n=>({tooth:String(n),toothType:'ฟันแท้'})),
+  ...[55,54,53,52,51,61,62,63,64,65].map(n=>({tooth:String(n),toothType:'ฟันน้ำนม'})),
+  ...[85,84,83,82,81,71,72,73,74,75].map(n=>({tooth:String(n),toothType:'ฟันน้ำนม'}))
+];
+let chosenStudent=null,selectedTooth=null,findings=[],activeHistory=null,chartMode='exam',examDraftInitialized=false,activeStatus=null;
+const $=id=>document.getElementById(id); const val=id=>$(id).value;
+function msg(s){$('message').textContent=s;}
+function showPage(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('aside button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');if(id==='dash')loadDash();}
+function escapeHtml(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function fillSelect(id,items,placeholder){const s=$(id);s.innerHTML='';if(placeholder)s.add(new Option(placeholder,''));(items||[]).forEach(x=>s.add(new Option(x,x)));}
+function localDate(){const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');}
+
+// Tooth chart: permanent and primary teeth displayed together on this page.
+function toothSvg(){return '<svg viewBox="0 0 48 54" aria-hidden="true"><path d="M24 4 C17 1 7 5 6 16 C5 25 10 31 12 40 C14 49 19 52 22 43 L24 37 L26 43 C29 52 34 49 36 40 C38 31 43 25 42 16 C41 5 31 1 24 4Z" fill="#fff" stroke="#7d8994" stroke-width="2.2"/><path d="M13 13 C17 8 21 9 24 12 C27 9 32 8 36 13" fill="none" stroke="#e5eaf0" stroke-width="2" stroke-linecap="round"/></svg>'; }
+function makeTeeth(id,nums,type){const box=$(id);nums.forEach(n=>{const b=document.createElement('button');b.type='button';b.className='tooth';b.innerHTML=toothSvg()+'<span>'+n+'</span>';b.dataset.tooth=String(n);b.title='ฟันซี่ '+n;b.addEventListener('click',()=>handleChartToothClick(String(n),type));box.appendChild(b);});}
+makeTeeth('adultUpper',[18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28],'ฟันแท้');
+makeTeeth('adultLower',[48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38],'ฟันแท้');
+makeTeeth('babyUpper',[55,54,53,52,51,61,62,63,64,65],'ฟันน้ำนม');
+makeTeeth('babyLower',[85,84,83,82,81,71,72,73,74,75],'ฟันน้ำนม');
+function initLegend(){
+  const box=$('legend');
+  box.innerHTML='';
+  statuses.forEach(status=>{
+    const b=document.createElement('button');
+    b.type='button';
+    b.className='status-choice';
+    b.dataset.status=status;
+    b.innerHTML='<i class="dot" style="background:'+statusColors[status]+'"></i><span>'+escapeHtml(status)+'</span>';
+    b.addEventListener('click',()=>setActiveStatus(status));
+    box.appendChild(b);
+  });
+  setActiveStatus(null);
+}
+function setActiveStatus(status){
+  activeStatus=status||null;
+  document.querySelectorAll('.status-choice').forEach(b=>b.classList.toggle('active',b.dataset.status===activeStatus));
+  $('activeStatusText').textContent=activeStatus
+    ?'สถานะที่เลือก: '+activeStatus+' — คลิกหมายเลขฟันเพื่อกำหนดสถานะนี้ให้หลายซี่ได้'
+    :'ยังไม่ได้เลือกสถานะ — เลือกสถานะก่อน แล้วคลิกหมายเลขฟันได้หลายซี่';
+}
+function paintChart(){
+  document.querySelectorAll('.tooth').forEach(b=>{b.style.background=statusColors[UNASSESSED];b.classList.remove('selected');});
+  const source=chartMode==='treatment'?(activeHistory?.currentTeeth||[]):findings;
+  (source||[]).forEach(t=>{const b=document.querySelector('.tooth[data-tooth="'+String(t.tooth)+'"]');if(b)b.style.background=statusColors[t.status]||statusColors[UNASSESSED];});
+}
+function updateFindingList(){
+  const box=$('findingList');
+  const counts={};statuses.forEach(s=>counts[s]=0);
+  findings.forEach(f=>{if(counts[f.status]!==undefined)counts[f.status]++;});
+  const evaluated=52-(counts[UNASSESSED]||0);
+  const permanentPresent=findings.filter(f=>f.toothType==='ฟันแท้'&&PRESENT_STATUSES.includes(f.status)).length;
+  const primaryPresent=findings.filter(f=>f.toothType==='ฟันน้ำนม'&&PRESENT_STATUSES.includes(f.status)).length;
+  const present=permanentPresent+primaryPresent;
+  const absent=findings.filter(f=>ABSENT_STATUSES.includes(f.status)).length;
+  const summary=statuses.filter(s=>counts[s]>0).map(s=>'<span class="status-pill" style="background:'+statusColors[s]+';color:#263442">'+escapeHtml(s)+' '+counts[s]+' ตำแหน่ง</span>').join(' ');
+  const arches=[
+    {label:'ฟันแท้บน',nums:[18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28]},
+    {label:'ฟันแท้ล่าง',nums:[48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38]},
+    {label:'ฟันน้ำนมบน',nums:[55,54,53,52,51,61,62,63,64,65]},
+    {label:'ฟันน้ำนมล่าง',nums:[85,84,83,82,81,71,72,73,74,75]}
+  ];
+  let chart='';
+  arches.forEach(a=>{
+    chart+='<div class="finding-arch"><div class="archlabel">'+a.label+'</div><div class="finding-teeth">';
+    a.nums.forEach(n=>{
+      const f=findings.find(x=>String(x.tooth)===String(n)); if(!f)return;
+      const opts=plans[f.status]||[]; const required=PLAN_REQUIRED_STATUSES.includes(f.status); let planControl='';
+      if(opts.length) planControl='<label class="finding-plan">แผน<select class="plan-select" data-plan-tooth="'+escapeHtml(f.tooth)+'">'+(required?'<option value="">เลือกแผน</option>':'')+opts.map(o=>'<option value="'+escapeHtml(o)+'"'+(f.plan===o?' selected':'')+'>'+escapeHtml(o)+'</option>').join('')+'</select></label>';
+      chart+='<div class="finding-tooth-card" style="--tooth-bg:'+statusColors[f.status]+'"><div class="finding-tooth-icon">'+toothSvg()+'</div><b>'+escapeHtml(f.tooth)+'</b><span class="finding-tooth-status">'+escapeHtml(f.status)+'</span>'+planControl+'<button type="button" class="btn secondary small tooth-detail-btn" data-edit-tooth="'+escapeHtml(f.tooth)+'">รายละเอียด</button></div>';
+    });
+    chart+='</div></div>';
+  });
+  box.innerHTML='<div class="finding-heading"><div><b>สรุปผลตรวจบนผังฟัน</b><p><b>ระบุสถานะแล้ว '+evaluated+'/52 ตำแหน่ง</b> | ฟันที่มีอยู่จริง '+present+' ซี่ (ฟันแท้ '+permanentPresent+' | ฟันน้ำนม '+primaryPresent+')<br>ไม่มีฟัน/ยังไม่ขึ้น '+absent+' ตำแหน่ง | <b>ยังไม่ได้ประเมิน '+(counts[UNASSESSED]||0)+' ตำแหน่ง</b></p></div></div><div class="finding-status-summary">'+(summary||'<span class="muted">ยังไม่ได้เลือกสถานะฟัน</span>')+'</div><p class="small-note">แสดงผลเป็นรูปฟันแยกตามตำแหน่ง ไม่ใช้ตารางรายแถว สามารถเลือกแผนการรักษาและเปิดรายละเอียดเป็นรายซี่ได้</p>'+chart;
+  box.querySelectorAll('.plan-select').forEach(sel=>sel.addEventListener('change',()=>{const f=findings.find(x=>String(x.tooth)===sel.dataset.planTooth);if(f){f.plan=sel.value;msg('กำหนดแผนของซี่ '+f.tooth+' เป็น '+(f.plan||'ยังไม่ได้เลือก'));}}));
+  box.querySelectorAll('[data-edit-tooth]').forEach(btn=>btn.addEventListener('click',()=>{const f=findings.find(x=>String(x.tooth)===btn.dataset.editTooth);if(f)openToothModal(f.tooth,f.toothType);}));
+}
+function initializeExamDraft(history){
+  // จำสถานะล่าสุดของแต่ละซี่ไว้ให้แก้เฉพาะซี่ที่เปลี่ยนแปลง; ครั้งแรกให้ฟันแท้เริ่มเป็น 'ยังไม่ขึ้น'
+  const previous=new Map((history?.currentTeeth||[]).map(t=>[String(t.tooth),t]));
+  findings=ALL_TEETH.map(def=>{
+    const old=previous.get(String(def.tooth));
+    return old
+      ? {...def,status:old.status||UNASSESSED,plan:old.plan||'',sealant:old.sealant||'',note:old.note||''}
+      : {...def,status:def.toothType==='ฟันแท้'?'ฟันที่ยังไม่ขึ้น':UNASSESSED,plan:'',sealant:'',note:''};
+  });
+  examDraftInitialized=true;
+  updateFindingList();paintChart();
+}
+function setChartMode(mode){
+  chartMode=mode==='treatment'?'treatment':'exam';
+  $('modeExamBtn').classList.toggle('active',chartMode==='exam');
+  $('modeCareBtn').classList.toggle('active',chartMode==='treatment');
+  document.querySelectorAll('.status-choice').forEach(b=>b.disabled=chartMode==='treatment');
+  if(chartMode==='treatment')setActiveStatus(null);
+  $('activeStatusText').textContent=chartMode==='exam'
+    ?(activeStatus?'สถานะที่เลือก: '+activeStatus+' — คลิกหมายเลขฟันเพื่อกำหนดสถานะนี้ให้หลายซี่ได้':'ยังไม่ได้เลือกสถานะ — เลือกสถานะก่อน แล้วคลิกหมายเลขฟันได้หลายซี่')
+    :'โหมดรักษา: ปุ่มเลือกสถานะถูกปิดชั่วคราว คลิกฟันบนผังเพื่อเลือกซี่สำหรับบันทึกการรักษา';
+  $('chartModeHint').textContent=chartMode==='exam'
+    ?'โหมดตรวจ: เลือกสถานะจากด้านซ้ายก่อน แล้วคลิกฟันที่มีสภาพนั้นได้หลายซี่ หากเลือกผิดให้เลือกสถานะใหม่แล้วคลิกซี่เดิมเพื่อแก้ไข ต้องระบุครบ 52 ตำแหน่งก่อนบันทึก'
+    :'โหมดรักษา: สีบนผังแสดงสถานะล่าสุด คลิกซี่ที่มีอยู่และต้องรักษาเพื่อเติมเลขซี่และแผนเดิมลงในแบบบันทึก';
+  paintChart();
+}
+function handleChartToothClick(tooth,type){
+  if(chartMode==='treatment'){
+    const item=(activeHistory?.currentTeeth||[]).find(t=>String(t.tooth)===String(tooth));
+    if(!item){msg('ซี่ '+tooth+' ยังไม่มีผลตรวจที่บันทึกไว้ กรุณาบันทึกผลตรวจใหม่ก่อน');return;}
+    if(ABSENT_STATUSES.includes(item.status)){msg('ซี่ '+tooth+' ถูกระบุว่า '+item.status+' จึงไม่ใช่ซี่ฟันที่มีอยู่เพื่อบันทึกการรักษา กรุณาตรวจสอบสถานะก่อน');return;}
+    if(item.status===UNASSESSED){msg('ซี่ '+tooth+' ยังไม่ได้ประเมิน กรุณาตรวจผลตรวจก่อน');return;}
+    chooseExamTooth(tooth,item.plan,item.status,item.examDate||'');
+    return;
+  }
+  if(!chosenStudent){msg('กรุณาค้นหาและเลือกนักเรียนก่อน');return;}
+  if(!activeStatus){msg('กรุณาเลือกสถานะฟันจากรายการด้านซ้ายก่อน แล้วจึงคลิกซี่ฟัน');return;}
+  if(activeStatus==='ฟันน้ำนมหลุดตามธรรมชาติ'&&type!=='ฟันน้ำนม'){
+    msg('สถานะฟันน้ำนมหลุดตามธรรมชาติใช้ได้เฉพาะฟันน้ำนมเท่านั้น');return;
+  }
+  const existing=findings.find(x=>String(x.tooth)===String(tooth));
+  const same=existing&&existing.status===activeStatus;
+  const options=plans[activeStatus]||[];
+  const defaultPlan=activeStatus==='ยังไม่ได้ประเมิน'?'':(PLAN_REQUIRED_STATUSES.includes(activeStatus)?'':(options[0]||''));
+  const next={
+    ...(existing||{}),tooth:String(tooth),toothType:type,status:activeStatus,
+    plan:same?(existing.plan||''):defaultPlan,
+    sealant:same?(existing.sealant||''):'',note:same?(existing.note||''):''
+  };
+  const idx=findings.findIndex(x=>String(x.tooth)===String(tooth));
+  if(idx>=0)findings[idx]=next;else findings.push(next);
+  updateFindingList();paintChart();
+  if(PLAN_REQUIRED_STATUSES.includes(activeStatus)){
+    openToothModal(tooth,type);
+    msg('เลือกสถานะซี่ '+tooth+' แล้ว กรุณายืนยันแผนการรักษาในหน้าต่างนี้');
+    return;
+  }
+  msg('กำหนดซี่ '+tooth+' เป็น “'+activeStatus+'” แล้ว คลิกซี่ถัดไปที่มีสถานะเดียวกันได้เลย');
+}
+function openToothModal(tooth,type){
+  if(!chosenStudent){msg('กรุณาค้นหาและเลือกนักเรียนก่อนเลือกซี่ฟัน');return;}
+  selectedTooth={tooth:String(tooth),toothType:type};
+  const old=findings.find(x=>String(x.tooth)===String(tooth));
+  $('modalTitle').textContent='รายละเอียดสภาพฟันซี่ '+tooth+' ('+type+')';
+  $('toothTypeHelp').textContent=type==='ฟันน้ำนม'
+    ?'ฟันน้ำนม: เลือก “ปกติ” หากยังอยู่ในปาก หรือ “ฟันน้ำนมหลุดตามธรรมชาติ” หากหลุดตามวัย ไม่ใช่การถอน'
+    :'ฟันแท้: เลือก “ปกติ” หากมีฟันอยู่จริง หรือเลือก “ฟันที่ถูกถอน” / “ฟันที่ยังไม่ขึ้น” ให้ตรงตามประวัติ';
+  fillSelect('status',statuses);
+  $('status').value=old?old.status:UNASSESSED;
+  updatePlans();
+  $('plan').value=old?old.plan:(PLAN_REQUIRED_STATUSES.includes($('status').value)?'':(plans[$('status').value]||[])[0]||'');
+  $('sealant').value=old?old.sealant||'':'';
+  $('toothNote').value=old?old.note||'':'';
+  $('toothModal').classList.remove('hidden');
+}
+function updatePlans(){const st=val('status');const opts=plans[st]||[];fillSelect('plan',opts,PLAN_REQUIRED_STATUSES.includes(st)?'เลือกแผนการรักษา':'');}
+$('status').addEventListener('change',updatePlans);
+function closeToothModal(){$('toothModal').classList.add('hidden');}
+function addFinding(){
+  if(!selectedTooth)return;
+  const st=val('status');
+  if(st===UNASSESSED){msg('กรุณาเลือกสถานะฟันให้ตรงกับสิ่งที่ตรวจพบ');return;}
+  if(st==='ฟันน้ำนมหลุดตามธรรมชาติ'&&selectedTooth.toothType!=='ฟันน้ำนม'){msg('สถานะฟันน้ำนมหลุดตามธรรมชาติใช้ได้เฉพาะฟันน้ำนม');return;}
+  const f={...selectedTooth,status:st,plan:val('plan'),sealant:val('sealant'),note:val('toothNote')};
+  const i=findings.findIndex(x=>String(x.tooth)===String(f.tooth));if(i>=0)findings[i]=f;else findings.push(f);
+  updateFindingList();paintChart();closeToothModal();msg('บันทึกรายละเอียดฟันซี่ '+f.tooth+' แล้ว');
+}
+function refreshRosterGrades(){const school=val('rosterSchool');$('studentRoster').innerHTML='';$('rosterCount').textContent='กำลังโหลดระดับชั้น...';google.script.run.withSuccessHandler(r=>{fillSelect('rosterGrade',r.grades||[],'ทุกชั้น');loadRoster();}).withFailureHandler(e=>msg(e.message||e)).getStudentRoster(school,'');}
+function loadRoster(){const school=val('rosterSchool'),grade=val('rosterGrade');if(!school){$('studentRoster').innerHTML='';$('rosterCount').textContent='กรุณาเลือกโรงเรียน';return;}$('studentRoster').textContent='กำลังโหลดรายชื่อ...';google.script.run.withSuccessHandler(r=>{const box=$('studentRoster');box.innerHTML='';$('rosterCount').textContent='พบรายชื่อนักเรียน '+r.students.length+' คน';r.students.forEach(st=>{const b=document.createElement('button');b.className='result-btn';const done=st.lastExam?'ตรวจล่าสุด '+st.lastExam.date:'ยังไม่มีผลตรวจ';b.textContent=st.firstName+' '+st.lastName+' | '+st.grade+' | '+done;b.addEventListener('click',()=>{selectStudent(st);$('patientWork').scrollIntoView({behavior:'smooth',block:'start'});});box.appendChild(b);});}).withFailureHandler(e=>{msg(e.message||e);$('studentRoster').textContent='โหลดรายชื่อไม่สำเร็จ';}).getStudentRoster(school,grade);}
+function searchPatient(){const q=val('workSearch').trim();if(!q){msg('กรุณาพิมพ์เลขบัตรประชาชนหรือชื่อนักเรียน');return;}const box=$('searchResults');box.textContent='กำลังค้นหา...';google.script.run.withSuccessHandler(rows=>{box.innerHTML='';if(!rows||!rows.length){box.textContent='ไม่พบข้อมูลนักเรียน';return;}rows.forEach(s=>{const b=document.createElement('button');b.className='result-btn';b.textContent=s.citizenId+' — '+s.firstName+' '+s.lastName+' | '+s.grade+' | '+s.school;b.addEventListener('click',()=>selectStudent(s));box.appendChild(b);});msg('พบข้อมูล '+rows.length+' รายการ กรุณาเลือกนักเรียน');}).withFailureHandler(e=>{box.textContent='ค้นหาไม่สำเร็จ';msg(e.message||e);}).searchStudents(q);}
+function selectStudent(s){chosenStudent=s;findings=[];activeHistory=null;examDraftInitialized=false;setActiveStatus(null);setChartMode('exam');$('patientBanner').classList.remove('hidden');$('patientBanner').innerHTML='<strong>'+escapeHtml(s.firstName+' '+s.lastName)+'</strong><br>เลขบัตรประชาชน '+escapeHtml(s.citizenId)+' | ชั้น '+escapeHtml(s.grade)+' | '+escapeHtml(s.school);$('patientWork').classList.remove('hidden');$('searchResults').innerHTML='';$('examNote').value='';$('gumStatus').value='ยังไม่ได้ประเมิน';$('urgency').value='ยังไม่ได้ประเมิน';$('examDate').value=localDate();$('careDate').value=localDate();$('careTooth').value='';$('carePlan').value='';$('carePlanHint').textContent='ยังไม่ได้เลือกซี่ฟันจากผลตรวจ';$('procedure').value='';$('outcome').value='';$('careNote').value='';updateFindingList();paintChart();loadHistory();msg('เลือกนักเรียนแล้ว ระบบกำลังโหลดประวัติและเตรียมผังฟัน 52 ซี่');}
+
+function saveStudent(){const d={citizenId:val('cid'),firstName:val('fname'),lastName:val('lname'),grade:val('grade'),school:val('school')};google.script.run.withSuccessHandler(r=>msg(r)).withFailureHandler(e=>msg(e.message||e)).saveStudent(d);}
+function importBulk(){const txt=val('bulk');if(!txt.trim()){msg('กรุณาวางรายชื่อนักเรียนก่อน');return;}msg('กำลังนำเข้ารายชื่อ...');google.script.run.withSuccessHandler(r=>msg(r)).withFailureHandler(e=>msg(e.message||e)).importStudentsTsv(txt);}
+function saveExam(){if(!chosenStudent){msg('กรุณาเลือกนักเรียน');return;}if(!val('examDate')){msg('กรุณาระบุวันที่ตรวจ');return;}const pending=findings.filter(f=>f.status===UNASSESSED);if(findings.length!==52||pending.length){msg('ยังไม่ได้ระบุสถานะ '+pending.length+' ตำแหน่ง กรุณาเลือกสถานะแล้วคลิกซี่ฟันที่ยังเป็นสีเทาให้ครบก่อนบันทึก');return;}const missingPlan=findings.filter(f=>PLAN_REQUIRED_STATUSES.includes(f.status)&&!String(f.plan||'').trim());if(missingPlan.length){msg('ยังไม่ได้เลือกแผนการรักษาของซี่ '+missingPlan.map(f=>f.tooth).join(', ')+' กรุณาเลือกแผนแยกแต่ละซี่ก่อนบันทึก');const row=$('findingList').querySelector('[data-plan-tooth="'+missingPlan[0].tooth+'"]');if(row)row.focus();return;}const invalidPrimary=findings.find(f=>f.status==='ฟันน้ำนมหลุดตามธรรมชาติ'&&f.toothType!=='ฟันน้ำนม');if(invalidPrimary){msg('ซี่ '+invalidPrimary.tooth+' ไม่ใช่ฟันน้ำนม กรุณาแก้สถานะ');return;}const d={studentId:chosenStudent.id,examDate:val('examDate'),examiner:val('examiner'),gumStatus:val('gumStatus'),urgency:val('urgency'),note:val('examNote'),teeth:findings};msg('กำลังบันทึกผลตรวจทั้ง 52 ตำแหน่ง...');google.script.run.withSuccessHandler(r=>{msg(r.message||'บันทึกผลตรวจแล้ว');$('examNote').value='';examDraftInitialized=false;loadHistory();loadDash();}).withFailureHandler(e=>msg(e.message||e)).saveExamination(d);}
+
+const procedureOutcomes={'อุดฟัน':'ฟันที่อุดแล้วไม่ผุ','PRR':'ได้รับการทำ PRR แล้ว','ถอนฟัน':'ฟันที่ถูกถอน','รักษารากฟัน':'รักษารากฟันแล้ว','เคลือบหลุมร่องฟัน':'ฟันที่ได้รับการเคลือบหลุมร่องฟันแล้ว','เคลือบฟลูออไรด์':'ได้รับการเคลือบฟลูออไรด์แล้ว','ขูดหินปูน':'ได้รับการขูดหินปูนแล้ว','ตรวจติดตาม':'ตรวจติดตามแล้ว','อื่น ๆ':'บันทึกการรักษาแล้ว'};
+$('procedure').addEventListener('change',()=>{$('outcome').value=procedureOutcomes[val('procedure')]||'';});
+function chooseExamTooth(tooth,plan,status,examDate){$('careTooth').value=String(tooth);$('carePlan').value=plan||'ไม่ได้ระบุ';$('carePlanHint').innerHTML='<b>ซี่ฟัน '+escapeHtml(tooth)+'</b> — ผลตรวจเดิม: '+escapeHtml(status||'-')+'<br>แผนจากโรงเรียน: '+escapeHtml(plan||'ไม่ได้ระบุ')+(examDate?' | ตรวจวันที่ '+escapeHtml(examDate):'')+'<br><span class="small-note">กรุณาเลือกหัตถการที่ทำจริง ไม่ใช่เลือกตามแผนอัตโนมัติ</span>';$('treatmentCard').scrollIntoView({behavior:'smooth',block:'center'});$('careTooth').focus();msg('เลือกฟันซี่ '+tooth+' สำหรับบันทึกการรักษาแล้ว');}
+function saveCare(){if(!chosenStudent){msg('กรุณาเลือกนักเรียนก่อน');return;}const d={studentId:chosenStudent.id,tooth:val('careTooth'),date:val('careDate'),provider:val('provider'),procedure:val('procedure'),outcome:val('outcome'),note:val('careNote')};msg('กำลังบันทึกประวัติการรักษา...');google.script.run.withSuccessHandler(r=>{msg(r);$('procedure').value='';$('outcome').value='';$('careNote').value='';loadHistory();loadDash();}).withFailureHandler(e=>msg(e.message||e)).saveTreatment(d);}
+
+function loadHistory(){if(!chosenStudent)return;google.script.run.withSuccessHandler(renderHistory).withFailureHandler(e=>msg(e.message||e)).getHistory(chosenStudent.id);}
+function renderToothResultChart(panel,latestTeeth,h,latest){
+  const currentMap={};(h.currentTeeth||[]).forEach(x=>currentMap[String(x.tooth)]=x);
+  const needsCare=['ฟันผุ','ฟันที่อุดแล้วผุต่อ','ฟันที่ผุระยะเริ่มแรก','ฟันที่มีหลุมร่องลึก'];
+  const originalNeeds=latestTeeth.filter(t=>needsCare.includes(t.status));
+  const pending=originalNeeds.map(t=>({exam:t,current:currentMap[String(t.tooth)]||t})).filter(x=>needsCare.includes(x.current.status));
+  const treated=originalNeeds.filter(t=>{const c=currentMap[String(t.tooth)]||t;return !!c.lastTreatment||['ฟันที่อุดแล้วไม่ผุ','ฟันที่ถูกถอน','รักษารากฟันแล้ว','ฟันที่ได้รับการเคลือบหลุมร่องฟันแล้ว','ได้รับการทำ PRR แล้ว'].includes(c.status);}).length;
+  const htmlSummary='<div class="result-summary"><div>พบฟันที่ต้องรักษา/ติดตาม<b>'+originalNeeds.length+' ซี่</b></div><div>รักษา/จัดการแล้ว<b>'+treated+' ซี่</b></div><div>ยังค้างรักษา<b>'+pending.length+' ซี่</b></div></div>';
+  let cards='';
+  if(pending.length){cards='<div class="pending-care-grid">'+pending.map(x=>{const t=x.exam,c=x.current,plan=t.plan||'ยังไม่ได้กำหนดแผน';return '<article class="pending-care-card"><div class="pending-tooth-icon" style="background:'+(statusColors[c.status]||'#fde9e6')+'">'+toothSvg()+'</div><div class="pending-care-main"><b>ฟันซี่ '+escapeHtml(t.tooth)+'</b><span class="status-pill need">'+escapeHtml(c.status)+'</span><small>แผนจากโรงเรียน: '+escapeHtml(plan)+'</small></div><button type="button" class="btn green small" data-pending-tooth="'+escapeHtml(t.tooth)+'" data-pending-plan="'+escapeHtml(plan)+'" data-pending-status="'+escapeHtml(c.status)+'" data-pending-date="'+escapeHtml(latest.date||'')+'">บันทึกการรักษา</button></article>';}).join('')+'</div>';}
+  else{cards='<div class="pending-empty"><b>ไม่พบฟันที่ค้างรักษา</b><p>ฟันที่ปกติหรือได้รับการรักษาเรียบร้อยแล้วจะไม่แสดงในรายการนี้ค่ะ</p></div>';}
+  panel.innerHTML=htmlSummary+'<div class="pending-care-section"><div class="pending-care-title"><b>รายการฟันที่ต้องได้รับการรักษา</b><span>แสดงเฉพาะซี่ที่ยังมีปัญหา</span></div>'+cards+'</div><p class="small-note">ผังฟันครบทุกซี่ยังคงอยู่ในส่วนบันทึกผลตรวจ ส่วนหน้านี้จะแสดงเฉพาะฟันที่ต้องรักษาหรือติดตาม เพื่อให้เลือกทำงานได้รวดเร็วขึ้น</p>';
+  panel.querySelectorAll('[data-pending-tooth]').forEach(b=>b.addEventListener('click',()=>chooseExamTooth(b.dataset.pendingTooth,b.dataset.pendingPlan,b.dataset.pendingStatus,b.dataset.pendingDate)));
+}
+function renderHistory(h){activeHistory=h||{exams:[],teeth:[],treatments:[],currentTeeth:[]};const exams=h.exams||[],teeth=h.teeth||[],treatments=h.treatments||[];if(!examDraftInitialized){initializeExamDraft(activeHistory);setChartMode('exam');}paintChart();const examById={};exams.forEach(e=>examById[e.id]=e);
+const ordered=exams.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));const latest=ordered[0]||null;const latestTeeth=latest?teeth.filter(t=>String(t.examId)===String(latest.id)):[];
+$('latestExamInfo').innerHTML=latest?'<b>ผลตรวจล่าสุดวันที่ '+escapeHtml(latest.date)+'</b> | ผู้ตรวจ '+escapeHtml(latest.examiner||'-')+' | โรงเรียน '+escapeHtml(latest.school||'-')+'<br>เหงือก: <b>'+escapeHtml(latest.gumStatus||'ยังไม่ได้ประเมิน')+'</b> | ความเร่งด่วน: <b>'+escapeHtml(latest.urgency||'ยังไม่ได้ประเมิน')+'</b>'+(!latest.toothStatusVerified?'<br><span style="color:#9a5b00"><b>หมายเหตุ:</b> ผลตรวจนี้มาจากระบบรุ่นก่อน ซึ่งอาจตั้งต้นทุกซี่เป็นปกติอัตโนมัติ จึงยังไม่นำมานับจำนวนฟันปัจจุบัน กรุณาตรวจประเมินใหม่เพื่อยืนยัน</span>':''):'ยังไม่มีผลตรวจจากโรงเรียนสำหรับนักเรียนคนนี้';
+const panel=$('examSummary');if(!latestTeeth.length){panel.innerHTML='<p class="muted">ยังไม่มีรายการผลตรวจฟันที่บันทึกไว้</p>';}else{renderToothResultChart(panel,latestTeeth,h,latest);}
+const summaryBox=$('dmftSummary');google.script.run.withSuccessHandler(r=>{if(!r||!r.counts)return;const c=r.counts,p=c.presence||{};summaryBox.innerHTML='<b>จำนวนฟันตามผลตรวจล่าสุด</b><br>ฟันที่มีอยู่จริง: <b>'+ (p.totalPresent||0) +' ซี่</b> (ฟันแท้ '+(p.permanentPresent||0)+' | ฟันน้ำนม '+(p.primaryPresent||0)+')<br>ฟันน้ำนมหลุดตามธรรมชาติ '+(p.naturalShedding||0)+' ซี่ | ฟันที่ถูกถอน '+(p.extracted||0)+' ซี่ | ฟันที่ยังไม่ขึ้น '+(p.unerupted||0)+' ซี่ | ไม่มีฟันแต่กำเนิด '+(p.congenitalAbsent||0)+' ซี่<br>ยังไม่ได้ประเมิน '+(p.unassessed||0)+' ตำแหน่ง<hr style="border:0;border-top:1px solid #d9e7f1;margin:9px 0"><b>สรุป DMFT/dmft</b><br>ฟันแท้: D '+c.permanent.D+' | M '+c.permanent.M+' | F '+c.permanent.F+' | <b>DMFT '+c.permanent.total+'</b><br>ฟันน้ำนม: d '+c.primary.D+' | m '+c.primary.M+' | f '+c.primary.F+' | <b>dmft '+c.primary.total+'</b><br>ซี่ที่ยังต้องรักษา '+c.untreated+' ซี่ | รายการรักษาที่บันทึก '+c.treated+' รายการ';}).withFailureHandler(e=>msg(e.message||e)).getStudentSummary(chosenStudent.id);
+const historyBox=$('history');let lines=[];ordered.forEach(e=>{lines.push('<div class="history-item"><b>ตรวจวันที่ '+escapeHtml(e.date)+'</b> — ผู้ตรวจ '+escapeHtml(e.examiner||'-')+' <span class="muted">'+escapeHtml(e.note||'')+'</span></div>');teeth.filter(t=>String(t.examId)===String(e.id)).forEach(t=>lines.push('<div class="history-item">ผลตรวจซี่ '+escapeHtml(t.tooth)+': '+escapeHtml(t.status)+' | แผน: '+escapeHtml(t.plan||'-')+'</div>'));});treatments.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).forEach(t=>lines.push('<div class="history-item"><b>รักษาซี่ '+escapeHtml(t.tooth)+' วันที่ '+escapeHtml(t.date)+'</b> — '+escapeHtml(t.procedure)+' | ผู้ให้บริการ '+escapeHtml(t.provider)+'<br><span class="muted">ผลหลังรักษา: '+escapeHtml(t.outcome||'-')+' '+escapeHtml(t.note||'')+'</span></div>'));historyBox.innerHTML=lines.length?lines.join(''):'ยังไม่มีประวัติการตรวจหรือการรักษา';
+}
+
+let schoolReportCache=null;
+function refreshReportGrades(){const school=val('reportSchool');google.script.run.withSuccessHandler(r=>{if($('reportSchool').options.length<=1)fillSelect('reportSchool',r.schools||[],'ทุกโรงเรียน');fillSelect('reportGrade',r.grades||[],'ทุกชั้น');}).withFailureHandler(e=>msg(e.message||e)).getSchoolTreatmentReport({school});}
+function loadSchoolReport(){const school=val('reportSchool'),grade=val('reportGrade');msg('กำลังประมวลผลรายงาน...');google.script.run.withSuccessHandler(r=>{schoolReportCache=r;const t=r.totals||{};$('rStudents').textContent=t.students||0;$('rCaries').textContent=t.cariesDetected||0;$('rTreated').textContent=t.treatedCaries||0;$('rRemaining').textContent=t.untreatedCaries||0;$('rComplete').textContent=t.fullyTreated||0;$('rPending').textContent=t.notComplete||0;
+$('schoolReportTable').innerHTML='<table><thead><tr><th>ชื่อ-นามสกุล</th><th>เลขประจำตัว</th><th>ชั้น</th><th>โรงเรียน</th><th>ฟันแท้</th><th>ฟันน้ำนม</th><th>ฟันผุ</th><th>เลขซี่ที่ผุ</th><th>อุดแล้ว</th><th>ถอน</th><th>ปราศจากฟันผุ</th><th>DMFT</th><th>dmft</th><th>เหงือก</th><th>เร่งด่วน</th><th>รักษาแล้ว</th><th>คงเหลือ</th><th>สถานะ</th></tr></thead><tbody>'+(r.rows||[]).map(x=>'<tr><td>'+escapeHtml(x.firstName+' '+x.lastName)+'</td><td>'+escapeHtml(x.citizenId)+'</td><td>'+escapeHtml(x.grade)+'</td><td>'+escapeHtml(x.school)+'</td><td>'+x.permanentPresent+'</td><td>'+x.primaryPresent+'</td><td>'+x.cariesDetected+'</td><td>'+escapeHtml((x.cariesTeeth||[]).join(', '))+'</td><td>'+x.filledTeeth+'</td><td>'+x.extractedTeeth+'</td><td>'+x.cariesFree+'</td><td>'+x.permanentDMFT+'</td><td>'+x.primaryDMFT+'</td><td>'+escapeHtml(x.gumStatus||'ยังไม่ได้ประเมิน')+'</td><td>'+escapeHtml(x.urgency||'ยังไม่ได้ประเมิน')+'</td><td>'+x.treatedCaries+'</td><td>'+x.untreatedCaries+'</td><td>'+escapeHtml(x.status)+'</td></tr>').join('')+'</tbody></table>';
+const detailRows=[];(r.rows||[]).forEach(x=>x.details.forEach(d=>detailRows.push('<tr><td>'+escapeHtml(x.firstName+' '+x.lastName)+'</td><td>'+escapeHtml(x.grade)+'</td><td>'+escapeHtml(d.tooth)+'</td><td>'+escapeHtml(d.originalStatus)+'</td><td>'+escapeHtml(d.plan||'-')+'</td><td>'+(d.treated?'รักษาแล้ว':'ยังไม่รักษา')+'</td><td>'+escapeHtml(d.treatment||'-')+'</td><td>'+escapeHtml(d.treatmentDate||'-')+'</td><td>'+escapeHtml(d.provider||'-')+'</td></tr>')));
+$('schoolReportDetails').innerHTML='<table><thead><tr><th>นักเรียน</th><th>ชั้น</th><th>ซี่ฟัน</th><th>ผลตรวจเดิม</th><th>แผนรักษา</th><th>สถานะ</th><th>หัตถการ</th><th>วันที่รักษา</th><th>ผู้ให้บริการ</th></tr></thead><tbody>'+detailRows.join('')+'</tbody></table>';
+msg('ประมวลผลรายงานเรียบร้อย');}).withFailureHandler(e=>msg(e.message||e)).getSchoolTreatmentReport({school,grade});}
+function downloadSchoolReport(){google.script.run.withSuccessHandler(downloadText('รายงานฟันผุและติดตามการรักษานักเรียน.csv','text/csv;charset=utf-8')).withFailureHandler(e=>msg(e.message||e)).exportSchoolTreatmentReportCsv(val('reportSchool'),val('reportGrade'));}
+
+function loadDash(){google.script.run.withSuccessHandler(d=>{$('nStudents').textContent=d.students;$('nExams').textContent=d.examinations;$('nTreat').textContent=d.treatments;}).withFailureHandler(e=>msg(e.message||e)).dashboard();}
+function downloadCsv(){google.script.run.withSuccessHandler(downloadText('ทะเบียนนักเรียน.csv','text/csv;charset=utf-8')).withFailureHandler(e=>msg(e.message||e)).exportCsv();}
+function downloadSummaryCsv(){google.script.run.withSuccessHandler(downloadText('สรุปผลตรวจและDMFTนักเรียน.csv','text/csv;charset=utf-8')).withFailureHandler(e=>msg(e.message||e)).exportSummaryCsv();}
+function downloadText(filename,type){return text=>{const a=document.createElement('a'),u=URL.createObjectURL(new Blob([text],{type}));a.href=u;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);};}
+
+initLegend();$('examDate').value=localDate();$('careDate').value=localDate();
+google.script.run.withSuccessHandler(p=>{fillSelect('provider',p,'เลือกผู้ให้บริการ');fillSelect('examiner',p,'เลือกชื่อผู้ตรวจ');}).withFailureHandler(e=>msg(e.message||e)).providers();
+loadDash();
+google.script.run.withSuccessHandler(r=>{fillSelect('rosterSchool',r.schools||[],'เลือกโรงเรียน');}).withFailureHandler(e=>msg(e.message||e)).getStudentRoster('','');
+refreshReportGrades();loadSchoolReport();
+</script>
+</body>
+</html>
